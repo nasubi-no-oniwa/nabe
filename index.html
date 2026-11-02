@@ -171,6 +171,7 @@ button:focus-visible{outline:3px solid var(--yuzu);outline-offset:2px}
 #countSub{margin-top:4px;font-weight:900;font-size:15px;color:#fff;text-shadow:0 1px 3px #000,0 0 10px rgba(0,0,0,.6);min-height:1.3em}
 #skipBtn{position:absolute;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);font-size:15px;padding:10px 16px;cursor:pointer;border:2px solid var(--yuzu)}
 #hRound span{display:block}
+#moveBtn{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 14px);width:auto;max-width:94%;margin:0;padding:12px 20px;font-size:clamp(16px,4.6vw,20px)}
 </style>
 </head>
 <body>
@@ -190,6 +191,7 @@ button:focus-visible{outline:3px solid var(--yuzu);outline-offset:2px}
   <div id="countBox" hidden><div id="countN">0</div><div id="countSub"></div></div>
   <div id="hint" hidden></div>
   <button id="skipBtn" class="chip" hidden data-i="skip">とばす ▶▶</button>
+  <button id="moveBtn" class="big k" hidden></button>
 
   <!-- タイトル -->
   <div class="overlay" id="titleP">
@@ -277,71 +279,83 @@ const BURN_T = 7;       // 煮すぎてから、まっ黒になるまでの秒�
 const TX = {
   ja: {
     title: 'なべなべすくい', titleH: 'なべなべ<br><em>すくい</em>', sub: '切って、煮て、すくえ。',
-    how: '① 具材をえらんで、<b>点線どおりに切る</b>（4回）<br>② 鍋の具はだんだん煮える。<b>ちょうどいい間だけキラキラ</b>（すくうと強い）<br>③ 鍋をなぞって<b>おたまですくう</b>。3回まで。時間制限なし、でも<b>全部まっ黒になったら終わり</b><br>④ すくった具は<b>すくった順に鍋の横に並ぶ</b>。最後に<b>野菜は＋、肉は×</b>で左から順に計算。先に野菜、あとで肉が強い',
+    how: '① 具材をえらんで、<b>点線どおりに切る</b>（4回）<br>② 鍋の具はだんだん煮える。<b>ちょうどいい間だけキラキラ</b>（すくうと強い）<br>③ 鍋をなぞって<b>おたまに具を入れる</b>。はなすと持ち上げるだけなので、何回でも足せる。<b>積みすぎ・速く動かすとこぼれる</b><br>④ 「お皿にうつす」で運ぶ（3回まで）。時間制限なし、でも<b>全部まっ黒になったら終わり</b><br>⑤ すくった順にお皿に並び、<b>肉は×、野菜は＋</b>（かけ算が先）。肉は直後の野菜にかかる：肉 肉 野菜 → 3×3×野菜',
     raw: '生', kiraL: 'キラキラ', over: '煮すぎ', burnt: 'まっ黒',
     rank: 'ランキング', toTitle: 'タイトルへ', pickL: 'えらぶ', scoopL: 'すくう', countL: '計算',
     pickH: '具材をえらぶ（{n}/{m}）', pickSub: 'えらんだ具材を切って、鍋に入れます', inPot: '鍋に入る具材', more: '追加',
     rar0: 'ふつう', rar1: 'レア', rar2: 'レジェンド', ptsV: '野菜 +{p}（{c}こ）', ptsM: '肉 ×{p}（{c}こ）',
     swapH: '鍋がいっぱい', swapSub: '「{name}」と入れかえる具材をえらんでください', swapCancel: 'やっぱりやめる',
     cutHint: '点線にそって、指でなぞって切る（{a}/{b}）', cutMiss: '線にそって切って！', cutGood: 'きれい！', cutOk: 'ふつう', cutSub: '切れ具合 {q}%',
-    scoopHint: 'キラキラ光った具を、なぞってすくう（はなすと上げる）', shimi: '味しみ中…まだ早い', allBurnt: '全部まっ黒…', allBurntSub: 'ここでおしまい',
+    scoopHint: '鍋をなぞって、おたまに具を入れる', shimi: '味しみ中…まだ早い', allBurnt: '全部まっ黒…', allBurntSub: 'ここでおしまい',
     empty: 'からっぽ…', skip: 'とばす ▶▶', potFinal: '{pot} ×1.5',
     resSub: 'キラキラですくった具 {k}こ', namePh: '名前（12文字まで）', send: '登録', needName: '名前を入れてね', badName: 'その名前は使えません',
     sending: '登録中…', sent: '登録しました', notBest: '自己ベストではないので登録しませんでした', sendFail: '登録できませんでした',
     retry: 'もう一回', share: 'Xに投稿', best: '自己ベスト {s}点', newBest: '自己ベスト更新！',
     rLoading: '読みこみ中…', rEmpty: 'まだだれもいません。1位になれる', rFail: 'つながりませんでした',
     shareT: '「{pot}」で{s}点の鍋をすくった（キラキラ{k}こ）', tags: '#なべなべすくい',
+    moveBtn: '🥄 お皿にうつす（{c}こ・あと{n}回）',
+    spill: 'こぼれた！',
+    spillN: 'こぼれた ×{n}',
   },
   en: {
     title: 'Nabe Nabe Sukui', titleH: 'Nabe Nabe<br><em>Sukui</em>', sub: 'Cut it, stew it, scoop it.',
-    how: '① Pick ingredients and <b>cut along the dotted lines</b> (4 times)<br>② Things in the pot slowly cook and <b>sparkle only while just right</b> (strong when scooped)<br>③ <b>Drag through the pot to scoop</b>. 3 scoops. No time limit, but <b>if everything burns, it\'s over</b><br>④ Scooped pieces <b>line up beside the pot in order</b>. At the end, <b>veggies add (+) and meat multiplies (×)</b>, left to right. Veggies first, meat later!',
+    how: '① Pick ingredients and <b>cut along the dotted lines</b> (4 times)<br>② Things slowly cook and <b>sparkle only while just right</b> (strong when scooped)<br>③ <b>Drag through the pot to gather pieces into the ladle</b>. Letting go just lifts it — you can keep adding. <b>Piling up or moving fast spills</b><br>④ Tap "Move to plate" to carry (3 times). No time limit, but <b>if everything burns, it\'s over</b><br>⑤ Pieces line up in order: <b>meat ×, veggie +</b> (× first). Meat multiplies the next veggie: meat meat veg → 3×3×veg',
     raw: 'Raw', kiraL: 'Sparkly', over: 'Overcooked', burnt: 'Burnt',
     rank: 'Ranking', toTitle: 'Title', pickL: 'Pick', scoopL: 'Scoop', countL: 'Count',
     pickH: 'Pick an ingredient ({n}/{m})', pickSub: 'You will cut it and put it in the pot', inPot: 'Going into the pot', more: 'More',
     rar0: 'Common', rar1: 'Rare', rar2: 'Legend', ptsV: 'Veggie +{p} ({c} pcs)', ptsM: 'Meat ×{p} ({c} pcs)',
     swapH: 'The pot is full', swapSub: 'Pick what to swap out for "{name}"', swapCancel: 'Never mind',
     cutHint: 'Trace the dotted line to cut ({a}/{b})', cutMiss: 'Follow the line!', cutGood: 'Clean!', cutOk: 'OK', cutSub: 'Cut {q}%',
-    scoopHint: 'Drag through sparkly pieces to scoop (let go to lift)', shimi: 'Soaking up flavor… too early', allBurnt: 'All burnt…', allBurntSub: "That's the end",
+    scoopHint: 'Drag through the pot to fill the ladle', shimi: 'Soaking up flavor… too early', allBurnt: 'All burnt…', allBurntSub: "That's the end",
     empty: 'Nothing…', skip: 'Skip ▶▶', potFinal: '{pot} ×1.5',
     resSub: 'Scooped while sparkling: {k}', namePh: 'Name (up to 12)', send: 'Submit', needName: 'Enter a name', badName: "That name can't be used",
     sending: 'Submitting…', sent: 'Submitted', notBest: 'Not your best, so it was not submitted', sendFail: "Couldn't submit",
     retry: 'Again', share: 'Post to X', best: 'Your best {s}', newBest: 'New personal best!',
     rLoading: 'Loading…', rEmpty: 'Nobody yet. You can be #1', rFail: "Couldn't connect",
     shareT: 'I scooped a {s}-point "{pot}" ({k} sparkly)', tags: '#なべなべすくい',
+    moveBtn: '🥄 Move to plate ({c} pcs, {n} left)',
+    spill: 'Spilled!',
+    spillN: 'Spilled ×{n}',
   },
   zh: {
     title: '鍋鍋撈撈', titleH: '鍋鍋<br><em>撈撈</em>', sub: '切好、煮好、撈起來。',
-    how: '① 選食材，<b>沿著虛線切</b>（4次）<br>② 鍋裡的料會慢慢煮熟，<b>只有剛好的時候會發亮</b>（這時撈起很強）<br>③ <b>在鍋裡劃過，用湯勺撈起</b>。最多3次。沒有時間限制，但<b>全部焦黑就結束</b><br>④ 撈起的料<b>依順序排在鍋旁</b>。最後<b>蔬菜是＋，肉是×</b>，從左邊依序計算。先蔬菜、後肉最強',
+    how: '① 選食材，<b>沿著虛線切</b>（4次）<br>② 鍋裡的料慢慢煮熟，<b>只有剛好的時候會發亮</b>（這時撈起很強）<br>③ <b>在鍋裡劃過，把料裝進湯勺</b>。放開只是舉起來，可以一直加。<b>堆太多或動太快會灑出來</b><br>④ 按「移到盤子」運過去（最多3次）。沒有時間限制，但<b>全部焦黑就結束</b><br>⑤ 依撈起順序排在盤子上，<b>肉是×、蔬菜是＋</b>（先乘後加）。肉會乘到後面的蔬菜：肉 肉 菜 → 3×3×菜',
     raw: '生的', kiraL: '發亮', over: '煮過頭', burnt: '焦黑',
     rank: '排行榜', toTitle: '回標題', pickL: '選料', scoopL: '撈', countL: '計算',
     pickH: '選食材（{n}/{m}）', pickSub: '選好的食材切好後放進鍋裡', inPot: '要放進鍋的食材', more: '追加',
     rar0: '普通', rar1: '稀有', rar2: '傳說', ptsV: '蔬菜 +{p}（{c}塊）', ptsM: '肉 ×{p}（{c}塊）',
     swapH: '鍋滿了', swapSub: '請選要和「{name}」交換的食材', swapCancel: '還是算了',
     cutHint: '用手指沿著虛線切（{a}/{b}）', cutMiss: '要沿著線切！', cutGood: '漂亮！', cutOk: '普通', cutSub: '切工 {q}%',
-    scoopHint: '劃過發亮的料來撈（放開就撈起）', shimi: '入味中…還太早', allBurnt: '全部焦黑…', allBurntSub: '到此結束',
+    scoopHint: '在鍋裡劃過，把料裝進湯勺', shimi: '入味中…還太早', allBurnt: '全部焦黑…', allBurntSub: '到此結束',
     empty: '空空的…', skip: '跳過 ▶▶', potFinal: '{pot} ×1.5',
     resSub: '發亮時撈起的料 {k}塊', namePh: '名字（最多12字）', send: '登錄', needName: '請輸入名字', badName: '這個名字不能用',
     sending: '登錄中…', sent: '已登錄', notBest: '不是自己的最佳紀錄，所以沒有登錄', sendFail: '無法登錄',
     retry: '再一次', share: '發到X', best: '自己最佳 {s}分', newBest: '刷新自己的最佳紀錄！',
     rLoading: '讀取中…', rEmpty: '還沒有人。你可以拿第1', rFail: '無法連線',
     shareT: '我在「{pot}」撈出了{s}分的鍋（發亮{k}塊）', tags: '#なべなべすくい',
+    moveBtn: '🥄 移到盤子（{c}塊・還剩{n}次）',
+    spill: '灑出來了！',
+    spillN: '灑了 ×{n}',
   },
   ko: {
     title: '나베나베 스쿠이', titleH: '나베나베<br><em>스쿠이</em>', sub: '썰고, 끓이고, 떠라.',
-    how: '① 재료를 골라 <b>점선을 따라 썬다</b> (4번)<br>② 냄비 속 재료는 점점 익고, <b>딱 알맞을 때만 반짝인다</b> (그때 뜨면 강하다)<br>③ <b>냄비를 그어서 국자로 뜬다</b>. 3번까지. 시간 제한은 없지만 <b>전부 새까매지면 끝</b><br>④ 뜬 재료는 <b>뜬 순서대로 냄비 옆에 줄을 선다</b>. 마지막에 <b>채소는 +, 고기는 ×</b>로 왼쪽부터 계산. 먼저 채소, 나중에 고기가 강하다',
+    how: '① 재료를 골라 <b>점선을 따라 썬다</b> (4번)<br>② 재료는 점점 익고 <b>딱 알맞을 때만 반짝인다</b> (그때 뜨면 강하다)<br>③ <b>냄비를 그어 국자에 재료를 담는다</b>. 떼면 들어 올리기만 하니까 계속 더할 수 있다. <b>너무 쌓거나 빨리 움직이면 쏟아진다</b><br>④ 「접시로 옮기기」로 옮긴다 (3번까지). 시간 제한은 없지만 <b>전부 새까매지면 끝</b><br>⑤ 뜬 순서대로 접시에 줄을 서고, <b>고기는 ×, 채소는 +</b> (곱셈 먼저). 고기는 바로 뒤 채소에 곱해진다: 고기 고기 채소 → 3×3×채소',
     raw: '날것', kiraL: '반짝', over: '너무 익음', burnt: '새까맘',
     rank: '랭킹', toTitle: '타이틀로', pickL: '고르기', scoopL: '뜨기', countL: '계산',
     pickH: '재료 고르기 ({n}/{m})', pickSub: '고른 재료를 썰어서 냄비에 넣어요', inPot: '냄비에 들어갈 재료', more: '추가',
     rar0: '보통', rar1: '레어', rar2: '레전드', ptsV: '채소 +{p} ({c}개)', ptsM: '고기 ×{p} ({c}개)',
     swapH: '냄비가 꽉 찼다', swapSub: '「{name}」와 바꿀 재료를 고르세요', swapCancel: '역시 그만두기',
     cutHint: '점선을 따라 손가락으로 그어 썰기 ({a}/{b})', cutMiss: '선을 따라 썰어!', cutGood: '깔끔!', cutOk: '보통', cutSub: '썬 솜씨 {q}%',
-    scoopHint: '반짝이는 재료를 그어서 떠라 (떼면 들어 올림)', shimi: '맛이 배는 중… 아직 이르다', allBurnt: '전부 새까매졌다…', allBurntSub: '여기서 끝',
+    scoopHint: '냄비를 그어 국자에 재료를 담기', shimi: '맛이 배는 중… 아직 이르다', allBurnt: '전부 새까매졌다…', allBurntSub: '여기서 끝',
     empty: '텅 비었다…', skip: '건너뛰기 ▶▶', potFinal: '{pot} ×1.5',
     resSub: '반짝일 때 뜬 재료 {k}개', namePh: '이름(12자까지)', send: '등록', needName: '이름을 넣어 줘', badName: '그 이름은 쓸 수 없어요',
     sending: '등록 중…', sent: '등록했어요', notBest: '자기 최고 기록이 아니라서 등록하지 않았어요', sendFail: '등록하지 못했어요',
     retry: '한 번 더', share: 'X에 올리기', best: '자기 최고 {s}점', newBest: '자기 최고 기록 갱신!',
     rLoading: '불러오는 중…', rEmpty: '아직 아무도 없어요. 1등이 될 수 있어', rFail: '연결하지 못했어요',
     shareT: '「{pot}」에서 {s}점짜리 냄비를 떴다 (반짝 {k}개)', tags: '#なべなべすくい',
+    moveBtn: '🥄 접시로 옮기기 ({c}개・남은 {n}번)',
+    spill: '쏟아졌다!',
+    spillN: '쏟아짐 ×{n}',
   },
 };
 const LI = { ja: 0, en: 1, zh: 2, ko: 3 };
@@ -357,7 +371,7 @@ const L4 = a => a[LI[LANG]] || a[0];
 
 /* ===================== 鍋 ===================== */
 const POTS = [
-  { id: 1, name: ['白湯とり鍋', 'Chicken Paitan Pot', '白湯雞肉鍋', '백탕 닭냄비'], fx: ['肉の×に+0.3', 'Meat +0.3×', '肉 ×+0.3', '고기 ×+0.3'], broth: 0xf3e7cf, bowl: '#f3e7cf' },
+  { id: 1, name: ['白湯とり鍋', 'Chicken Paitan Pot', '白湯雞肉鍋', '백탕 닭냄비'], fx: ['肉の×に+1', 'Meat +1×', '肉 ×+1', '고기 ×+1'], broth: 0xf3e7cf, bowl: '#f3e7cf' },
   { id: 2, name: ['野菜よせ鍋', 'Veggie Yose Pot', '蔬菜什錦鍋', '채소 모둠냄비'], fx: ['野菜の＋が1.5倍', 'Veggie + is ×1.5', '蔬菜的＋變1.5倍', '채소 +가 1.5배'], broth: 0xd9a24a, bowl: '#d9a24a' },
   { id: 3, name: ['激辛鍋', 'Super Spicy Pot', '超辣鍋', '초매운 냄비'], fx: ['最後に全部×1.5。最初の3秒は味しみ待ち（早いと弱い）', 'Final total ×1.5. Wait 3s for the flavor (early is weak)', '最後全部×1.5。前3秒等入味（太早會變弱）', '마지막에 전부 ×1.5. 처음 3초는 맛 배기 대기 (빠르면 약함)'], broth: 0xc4281b, bowl: '#c4281b' },
 ];
@@ -365,14 +379,14 @@ const POTS = [
 /* ===================== 具材 ===================== */
 // t: v=野菜（＋） c=肉（×） / r: レア度 / val: 野菜は足す数、肉はかける数 / pc: 鍋に入るこ数 / lines: 切る線の数 / cook: ちょうどよく煮えるまでの秒数
 const ING = {
-  momo: { t: 'c', r: 0, val: 1.5, pc: 4, lines: 1, cook: 7, col: 0xf0b49c, shape: 'chunk', name: ['もも肉', 'Thigh', '雞腿肉', '닭다리살'], fx: ['シンプルに×1.5', 'Plain ×1.5', '單純×1.5', '그냥 ×1.5'] },
-  mune: { t: 'c', r: 0, val: 1.2, pc: 5, lines: 1, cook: 6, col: 0xf7d2c2, shape: 'chunk', name: ['むね肉', 'Breast', '雞胸肉', '닭가슴살'], fx: ['前にある肉1こにつき×+0.1', '+0.1× per meat before it', '前面每有1塊肉 ×+0.1', '앞에 있는 고기 1개마다 ×+0.1'] },
-  tebasaki: { t: 'c', r: 1, val: 1.5, pc: 3, lines: 1, cook: 8, col: 0xd9935a, shape: 'wing', name: ['手羽先', 'Wing tip', '雞翅尖', '닭날개'], fx: ['1こだけですくうと×3', '×3 if scooped alone', '單獨撈起時×3', '혼자 뜨면 ×3'] },
-  tsukune: { t: 'c', r: 1, val: 1.3, pc: 4, lines: 2, cook: 6, col: 0x9b6a43, shape: 'ball', name: ['つくね', 'Tsukune', '雞肉丸', '츠쿠네'], fx: ['前にあるつくね1こにつき×+0.3', '+0.3× per tsukune before it', '前面每有1顆雞肉丸 ×+0.3', '앞에 있는 츠쿠네 1개마다 ×+0.3'] },
-  kawa: { t: 'c', r: 0, val: 1.3, pc: 4, lines: 2, cook: 5, col: 0xf3dca0, shape: 'skin', name: ['鶏皮', 'Chicken skin', '雞皮', '닭껍질'], fx: ['生・煮すぎでも弱くならない', 'Not weakened when raw or overcooked', '生的、煮過頭都不會變弱', '날것·너무 익어도 약해지지 않음'] },
-  jidori: { t: 'c', r: 2, val: 2, pc: 3, lines: 2, cook: 9, col: 0xe48f72, shape: 'chunk', name: ['地鶏', 'Jidori chicken', '土雞', '토종닭'], fx: ['とにかく×2', 'Just ×2', '就是×2', '그냥 ×2'] },
+  momo: { t: 'c', r: 0, val: 3, pc: 4, lines: 1, cook: 7, col: 0xf0b49c, shape: 'chunk', name: ['もも肉', 'Thigh', '雞腿肉', '닭다리살'], fx: ['シンプルに×3', 'Plain ×3', '單純×3', '그냥 ×3'] },
+  mune: { t: 'c', r: 0, val: 2, pc: 5, lines: 1, cook: 6, col: 0xf7d2c2, shape: 'chunk', name: ['むね肉', 'Breast', '雞胸肉', '닭가슴살'], fx: ['前に並んだ肉1こにつき×+0.5', '+0.5× per meat before it', '前面每有1塊肉 ×+0.5', '앞에 있는 고기 1개마다 ×+0.5'] },
+  tebasaki: { t: 'c', r: 1, val: 3, pc: 3, lines: 1, cook: 8, col: 0xd9935a, shape: 'wing', name: ['手羽先', 'Wing tip', '雞翅尖', '닭날개'], fx: ['1こだけで運ぶと×6', '×6 if carried alone', '單獨運送時×6', '혼자 옮기면 ×6'] },
+  tsukune: { t: 'c', r: 1, val: 2, pc: 4, lines: 2, cook: 6, col: 0x9b6a43, shape: 'ball', name: ['つくね', 'Tsukune', '雞肉丸', '츠쿠네'], fx: ['前に並んだつくね1こにつき×+1', '+1× per tsukune before it', '前面每有1顆雞肉丸 ×+1', '앞에 있는 츠쿠네 1개마다 ×+1'] },
+  kawa: { t: 'c', r: 0, val: 2.5, pc: 4, lines: 2, cook: 5, col: 0xf3dca0, shape: 'skin', name: ['鶏皮', 'Chicken skin', '雞皮', '닭껍질'], fx: ['生・煮すぎでも弱くならない', 'Not weakened when raw or overcooked', '生的、煮過頭都不會變弱', '날것·너무 익어도 약해지지 않음'] },
+  jidori: { t: 'c', r: 2, val: 5, pc: 3, lines: 2, cook: 9, col: 0xe48f72, shape: 'chunk', name: ['地鶏', 'Jidori chicken', '土雞', '토종닭'], fx: ['とにかく×5', 'Just ×5', '就是×5', '그냥 ×5'] },
   hakusai: { t: 'v', r: 0, val: 10, pc: 6, lines: 2, cook: 4, col: 0xeef5d8, shape: 'leaf', name: ['白菜', 'Napa cabbage', '白菜', '배추'], fx: ['前にある野菜1こにつき+3', '+3 per veggie before it', '前面每有1樣蔬菜+3', '앞에 있는 채소 1개마다 +3'] },
-  negi: { t: 'v', r: 0, val: 12, pc: 5, lines: 3, cook: 3, col: 0xeef3e2, shape: 'negi', name: ['ねぎ', 'Leek', '蔥', '대파'], fx: ['次の肉の×を+0.5', 'Next meat gets +0.5×', '下一塊肉 ×+0.5', '다음 고기 ×+0.5'] },
+  negi: { t: 'v', r: 0, val: 12, pc: 5, lines: 3, cook: 3, col: 0xeef3e2, shape: 'negi', name: ['ねぎ', 'Leek', '蔥', '대파'], fx: ['次の肉の×に+1', 'Next meat gets +1×', '下一塊肉 ×+1', '다음 고기 ×+1'] },
   ninjin: { t: 'v', r: 0, val: 15, pc: 4, lines: 3, cook: 7, col: 0xf08a24, shape: 'carrot', name: ['にんじん', 'Carrot', '紅蘿蔔', '당근'], fx: ['前に大根があれば+20', '+20 if daikon is before it', '前面有白蘿蔔就+20', '앞에 무가 있으면 +20'] },
   daikon: { t: 'v', r: 1, val: 18, pc: 4, lines: 3, cook: 9, col: 0xf7f5ee, shape: 'daikon', name: ['大根', 'Daikon', '白蘿蔔', '무'], fx: ['煮えた秒数×3（最大+40）', '+3 per second cooked (max +40)', '煮的秒數×3（最多+40）', '익은 초 ×3 (최대 +40)'] },
   shiitake: { t: 'v', r: 1, val: 18, pc: 4, lines: 1, cook: 5, col: 0x7a4f2e, shape: 'shroom', name: ['しいたけ', 'Shiitake', '香菇', '표고버섯'], fx: ['すくうと鍋に残った野菜が全部+5', 'When scooped, veggies left in the pot +5', '撈起後鍋裡剩下的蔬菜全部+5', '뜨면 냄비에 남은 채소 전부 +5'] },
@@ -383,48 +397,60 @@ const ING = {
 const ingName = id => L4(ING[id].name);
 const hex = n => '#' + n.toString(16).padStart(6, '0');
 
-/* ===================== 点数（すくった順に左から） ===================== */
+/* ===================== 点数（すくった順。肉は×、野菜は＋。かけ算が先） ===================== */
+// 例：肉3 肉3 野菜1 肉3 野菜1 野菜1 → 3×3×1 ＋ 3×1 ＋ 1
 // line: [{id, st, cook, umami, alone, early}]
+function vegValue(it, ctx, pot) {
+  const g = ING[it.id]; let a = g.val + (it.umami || 0);
+  if (it.id === 'hakusai') a += 3 * ctx.nV;
+  if (it.id === 'ninjin' && ctx.hasDaikon) a += 20;
+  if (it.id === 'daikon') a += Math.min(40, Math.floor(3 * it.cook));
+  if (it.id === 'enoki') a += 6 * ctx.nEn;
+  if (it.id === 'shungiku' && ctx.prevMeat) a += 20;
+  if (pot === 2) a *= 1.5;
+  if (it.st === 'kira') a *= 2; else if (it.st === 'raw') a *= .8; else if (it.st === 'over') a *= .6; else if (it.st === 'burnt') a = 0;
+  if (it.early) a *= .5;
+  return Math.round(a);
+}
+function meatValue(it, ctx, pot) {
+  const g = ING[it.id]; let m = g.val;
+  if (it.id === 'mune') m += .5 * ctx.nM;
+  if (it.id === 'tsukune') m += 1 * ctx.nTs;
+  if (it.id === 'tebasaki' && it.alone) m = 6;
+  if (pot === 1) m += 1;
+  let ex = m - 1;
+  if (it.st === 'kira') ex *= 2; else if (it.id !== 'kawa' && it.st === 'raw') ex *= .5; else if (it.id !== 'kawa' && it.st === 'over') ex *= .6;
+  if (it.st === 'burnt') return 1;
+  if (it.early) ex *= .5;
+  m = 1 + ex + ctx.nextAdd;
+  if (ctx.nextDouble) m *= 2;
+  ctx.nextAdd = 0; ctx.nextDouble = false;
+  return Math.round(m * 100) / 100;
+}
 function evalLine(line, pot) {
-  let v = 0, nextAdd = 0, nextDouble = false, nV = 0, nM = 0, nTs = 0, nEn = 0, hasDaikon = false, prevMeat = false;
+  const ctx = { nV: 0, nM: 0, nTs: 0, nEn: 0, hasDaikon: false, prevMeat: false, nextAdd: 0, nextDouble: false };
+  let total = 0, prod = 1, chain = [], live = false;
   const steps = [];
   for (const it of line) {
-    const g = ING[it.id];
-    if (g.t === 'v') {
-      let a = g.val + (it.umami || 0);
-      if (it.id === 'hakusai') a += 3 * nV;
-      if (it.id === 'ninjin' && hasDaikon) a += 20;
-      if (it.id === 'daikon') a += Math.min(40, Math.floor(3 * it.cook));
-      if (it.id === 'enoki') a += 6 * nEn;
-      if (it.id === 'shungiku' && prevMeat) a += 20;
-      if (pot === 2) a *= 1.5;
-      if (it.st === 'kira') a *= 2; else if (it.st === 'raw') a *= .8; else if (it.st === 'over') a *= .6; else if (it.st === 'burnt') a = 0;
-      if (it.early) a *= .5;
-      a = Math.round(a); v += a;
-      if (it.st !== 'burnt') { if (it.id === 'negi') nextAdd += .5; if (it.id === 'kujo') nextDouble = true; }
-      steps.push({ op: '+', n: a, v });
-      nV++; if (it.id === 'enoki') nEn++; if (it.id === 'daikon') hasDaikon = true; prevMeat = false;
+    if (ING[it.id].t === 'v') {
+      const a = vegValue(it, ctx, pot), term = Math.round(prod * a);
+      total += term;
+      steps.push({ op: '+', a, chain: chain.slice(), n: term, v: total });
+      prod = 1; chain = []; live = false;
+      if (it.st !== 'burnt') { if (it.id === 'negi') ctx.nextAdd += 1; if (it.id === 'kujo') ctx.nextDouble = true; }
+      ctx.nV++; if (it.id === 'enoki') ctx.nEn++; if (it.id === 'daikon') ctx.hasDaikon = true; ctx.prevMeat = false;
     } else {
-      let m = g.val;
-      if (it.id === 'mune') m += .1 * nM;
-      if (it.id === 'tsukune') m += .3 * nTs;
-      if (it.id === 'tebasaki' && it.alone) m = 3;
-      if (pot === 1) m += .3;
-      let ex = m - 1;
-      if (it.st === 'kira') ex *= 2; else if (it.id !== 'kawa' && it.st === 'raw') ex *= .5; else if (it.id !== 'kawa' && it.st === 'over') ex *= .6;
-      if (it.st === 'burnt') ex = 0;
-      if (it.early) ex *= .5;
-      m = 1 + ex + (it.st === 'burnt' ? 0 : nextAdd);
-      if (nextDouble && it.st !== 'burnt') m *= 2;
-      if (it.st !== 'burnt') { nextAdd = 0; nextDouble = false; }
-      m = Math.round(m * 100) / 100; v *= m;
-      steps.push({ op: '×', n: m, v });
-      nM++; if (it.id === 'tsukune') nTs++; prevMeat = true;
+      const m = meatValue(it, ctx, pot);
+      prod *= m; chain.push(m); if (it.st !== 'burnt') live = true;
+      steps.push({ op: '×', n: m, chain: chain.slice(), v: total });
+      ctx.nM++; if (it.id === 'tsukune') ctx.nTs++; ctx.prevMeat = true;
     }
   }
-  if (pot === 3 && line.length) { v *= 1.5; steps.push({ op: 'pot', n: 1.5, v }); }
-  return { v: Math.round(v), steps };
+  if (chain.length) { const n = live ? Math.round(prod) : 0; total += n; steps.push({ op: 'tail', chain: chain.slice(), n, v: total }); }
+  if (pot === 3 && line.length) { total *= 1.5; steps.push({ op: 'pot', n: 1.5, v: total }); }
+  return { v: Math.round(total), steps };
 }
+const chainStr = c => c.map(m => (Math.round(m * 100) / 100)).join('×');
 
 /* ===================== 音 ===================== */
 let ac = null, OUTN = null;
@@ -784,6 +810,8 @@ function drawCut(dt) {
 }
 
 /* ===================== すくう ===================== */
+// おたま：なぞる（鍋に沈める）→ はなす（鍋の上に持ち上げる。まだ回数は減らない）→ もう一度なぞって足せる
+// 「お皿にうつす」で運ぶ（ここで1回）。積みすぎ・速く動かすとこぼれる
 let SC = null;
 const ladle = new THREE.Group();
 {
@@ -793,11 +821,12 @@ const ladle = new THREE.Group();
   const h = new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, 4, 8), m); h.position.set(0, 1.6, 1.5); h.rotation.x = .9;
   ladle.add(bowl, rim, h); ladle.visible = false; scene.add(ladle);
 }
-const LADLE_R = .85;
+const LADLE_R = .7, SAFE_N = 4, MAX_IN = 10;
 function clearTray() {
   if (SC && SC.line) for (const it of SC.line) trayG.remove(it.obj);
+  if (SC && SC.falling) for (const f of SC.falling) scene.remove(f.obj);
   plates.forEach(p => { p.visible = false; p.scale.setScalar(1); });
-  $('#labels').innerHTML = '';
+  $('#labels').innerHTML = ''; labelEls.length = 0;
 }
 function startScoop() {
   mode = 'scoop'; boardG.visible = false; potG.visible = true; trayG.visible = true; setCam('pot');
@@ -810,35 +839,81 @@ function startScoop() {
     potG.add(obj);
     items.push({ id: b.id, st: 'raw', cook: 0, ideal: ING[b.id].cook + (Math.random() - .5) * 1.6, umami: 0, obj, a, r, w: .12 + Math.random() * .1, ph: Math.random() * 6, drop: true, vy: 0 });
   }
-  SC = { t: 0, left: SCOOPS, items, grabbed: [], holding: false, holdT: 0, ended: false, lifting: 0, line: [], flying: [] };
+  SC = { t: 0, left: SCOOPS, items, grabbed: [], ld: 'none', ended: false, line: [], flying: [], falling: [], carry: null, prevLP: new THREE.Vector3() };
   SND.dip(); setStep(tr('scoopL'), ''); updLadles(); $('#hScore').textContent = '?';
-  $('#shimi').hidden = RUN.pot !== 3; hint(tr('scoopHint'));
+  $('#shimi').hidden = RUN.pot !== 3; hint(tr('scoopHint')); $('#moveBtn').hidden = true;
 }
 function updLadles() { $('#hLadles').innerHTML = Array.from({ length: SCOOPS }, (_, i) => `<i class="${i < SCOOPS - SC.left ? 'used' : ''}">🥄</i>`).join(''); }
+function updMoveBtn() {
+  const b = $('#moveBtn');
+  if (mode !== 'scoop' || SC.ended || SC.ld !== 'hover' || !SC.grabbed.length) { b.hidden = true; return; }
+  b.textContent = tr('moveBtn', { c: SC.grabbed.length, n: SC.left }); b.hidden = false; hint(null);
+}
 const ray = new THREE.Raycaster(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), ndc = new THREE.Vector2(), hitP = new THREE.Vector3();
 function potPoint(e) { ndc.set(e.clientX / W * 2 - 1, -(e.clientY / H) * 2 + 1); ray.setFromCamera(ndc, camera); return ray.ray.intersectPlane(plane, hitP) ? hitP.clone() : null; }
 canvas.addEventListener('pointerdown', e => {
-  if (mode !== 'scoop' || SC.ended || SC.left <= 0 || SC.holding || SC.lifting > 0) return;
+  if (mode !== 'scoop' || SC.ended || SC.left <= 0 || !(SC.ld === 'none' || SC.ld === 'hover')) return;
+  const p = potPoint(e); if (!p || Math.hypot(p.x, p.z) > POT_R + .6) return;
   audioOn(); canvas.setPointerCapture(e.pointerId);
-  const p = potPoint(e); if (!p) return;
-  SC.holding = true; SC.holdT = 0; SC.grabbed = []; SC.target = p; ladle.visible = true; ladle.position.set(p.x, 1.2, p.z); SND.dip(); hint(null);
+  if (SC.ld === 'none') { ladle.visible = true; ladle.position.set(p.x, 1.2, p.z); }
+  SC.ld = 'dip'; SC.target = p; SND.dip(); hint(null); $('#moveBtn').hidden = true;
 });
-canvas.addEventListener('pointermove', e => { if (mode !== 'scoop' || !SC.holding) return; const p = potPoint(e); if (p) SC.target = p; });
-canvas.addEventListener('pointerup', () => { if (mode === 'scoop' && SC.holding) liftLadle(); });
-canvas.addEventListener('pointercancel', () => { if (mode === 'scoop' && SC.holding) liftLadle(); });
-function liftLadle() {
-  SC.holding = false; SC.left--; updLadles(); SC.lifting = .5;
-  const got = SC.grabbed.map(g => g.it);
-  for (const it of got) { it.alone = got.length === 1; it.early = RUN.pot === 3 && SC.t < SHIMI_T; }
-  SND.lift(got.length);
-  // しいたけ：鍋に残った野菜に旨み
-  const nS = got.filter(x => x.id === 'shiitake' && x.st !== 'burnt').length;
-  if (nS) for (const it of SC.items) if (!got.includes(it) && ING[it.id].t === 'v') it.umami += 5 * nS;
+canvas.addEventListener('pointermove', e => { if (mode !== 'scoop' || SC.ld !== 'dip') return; const p = potPoint(e); if (p) SC.target = p; });
+const ladleUp = () => {
+  if (mode !== 'scoop' || SC.ld !== 'dip') return;
+  SC.ld = 'hover'; SND.lift(SC.grabbed.length);
+  // 持ち上げた瞬間、積みすぎた分はずり落ちる
+  let n = 0;
+  for (let k = SC.grabbed.length - 1; k >= SAFE_N; k--) if (Math.random() < (k >= 6 ? .7 : .25)) { spillToPot(k); n++; }
+  if (n) spillPop(n);
+  if (SC.grabbed.length) updMoveBtn(); else hint(tr('scoopHint'));
+};
+canvas.addEventListener('pointerup', ladleUp); canvas.addEventListener('pointercancel', ladleUp);
+$('#moveBtn').onclick = e => { e.stopPropagation(); if (mode !== 'scoop' || SC.ld !== 'hover' || !SC.grabbed.length) return; SND.click(); startCarry(); };
+
+// おたまの中の置き場所（最初の4こは中、5こ目からは上に積む）
+function slotOff(k) {
+  if (k === 0) return new THREE.Vector3(0, -.12, 0);
+  if (k < SAFE_N) { const a = k * 2.1; return new THREE.Vector3(Math.cos(a) * .33, -.1, Math.sin(a) * .33); }
+  const a = k * 2.4; return new THREE.Vector3(Math.cos(a) * .2, .08 + (k - SAFE_N) * .14, Math.sin(a) * .2);
+}
+function spillToPot(k) {
+  const g = SC.grabbed.splice(k, 1)[0]; if (!g) return;
+  const it = g.it, p = it.obj.position;
+  it.r = Math.min(POT_R - .45, Math.hypot(p.x, p.z)); it.a = Math.atan2(p.z, p.x); it.drop = true; it.vy = 2.5;
+  SC.grabbed.forEach((gg, i) => gg.off = slotOff(i));
+}
+function spillPop(n) { const [x, y] = toScreen(ladle.position); pop(x, Math.max(90, y - 50), n > 1 ? tr('spillN', { n }) : tr('spill'), []); SND.dip(); buzz(10); }
+
+function startCarry() {
+  SC.left--; updLadles(); $('#moveBtn').hidden = true;
+  const from = ladle.position.clone(), idx = SC.line.length;
+  const to = slotPos(Math.min(idx, plates.length - 1)).clone().lerp(new THREE.Vector3(0, TABLE_Y, TRAY_Z), .5); to.y = 1.4;
+  // 運ぶ途中でこぼれるかを先に決めておく（積んだ分は半分くらい、多すぎると下の段も少し）
+  const over = SC.grabbed.length;
+  SC.grabbed.forEach((g, k) => { g.dropAt = (k >= SAFE_N && Math.random() < .5) || (over > 6 && Math.random() < .15) ? .25 + Math.random() * .6 : -1; });
+  SC.ld = 'carry'; SC.carry = { from, to, t: 0 };
+}
+function stepCarry(dt) {
+  const c = SC.carry; c.t += dt / .9; const k = Math.min(1, c.t), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+  ladle.position.lerpVectors(c.from, c.to, e); ladle.position.y = c.from.y + (c.to.y - c.from.y) * e + Math.sin(k * Math.PI) * 1.2;
+  let n = 0;
+  for (let i = SC.grabbed.length - 1; i >= 0; i--) {
+    const g = SC.grabbed[i];
+    if (g.dropAt >= 0 && k >= g.dropAt) {
+      SC.grabbed.splice(i, 1); n++;
+      const it = g.it, wp = new THREE.Vector3(); it.obj.getWorldPosition(wp);
+      SC.items.splice(SC.items.indexOf(it), 1); potG.remove(it.obj); scene.add(it.obj); it.obj.position.copy(wp);
+      SC.falling.push({ obj: it.obj, v: new THREE.Vector3((Math.random() - .5) * 3, 1.5, (Math.random() - .5) * 2), t: 0 });
+    }
+  }
+  if (n) { const [x, y] = toScreen(ladle.position); pop(x, Math.max(90, y - 50), n > 1 ? tr('spillN', { n }) : tr('spill'), []); SND.burnt(); buzz([15, 20, 15]); }
+  if (k >= 1) landLadle();
 }
 function landLadle() {
-  const got = SC.grabbed.map(g => g.it); SC.grabbed = []; ladle.visible = false;
+  const got = SC.grabbed.map(g => g.it); SC.grabbed = []; ladle.visible = false; SC.ld = 'none'; SC.carry = null;
+  for (const it of got) { it.alone = got.length === 1; }
   if (!got.length) { const [x, y] = toScreen(ladle.position); pop(x, Math.max(90, y - 40), tr('empty'), []); SND.meh(); }
-  // すくった順にお皿へ飛ばす
   got.forEach((it, k) => {
     SC.items.splice(SC.items.indexOf(it), 1);
     const idx = SC.line.length; SC.line.push(it);
@@ -851,7 +926,9 @@ function landLadle() {
   else hint(tr('scoopHint'));
 }
 function finishScoop() {
-  if (SC.ended) return; SC.ended = true; hint(null); $('#shimi').hidden = true; ladle.visible = false;
+  if (SC.ended) return; SC.ended = true; hint(null); $('#shimi').hidden = true; $('#moveBtn').hidden = true;
+  if (SC.grabbed.length) { for (let k = SC.grabbed.length - 1; k >= 0; k--) spillToPot(k); }
+  ladle.visible = false; SC.ld = 'none';
   setTimeout(startCount, 500);
 }
 function stepScoop(dt, tt) {
@@ -861,16 +938,19 @@ function stepScoop(dt, tt) {
     SC.t += dt;
     if (RUN.pot === 3) { const k = Math.min(1, SC.t / SHIMI_T); $('#shimiBar').style.width = (k * 100) + '%'; if (k >= 1) $('#shimi').hidden = true; }
   }
+  const inLadle = it => SC.grabbed.some(g => g.it === it);
   for (const it of SC.items) {
-    if (SC.grabbed.some(g => g.it === it)) continue;
-    it.a += it.w * dt * (1.2 - it.r / POT_R * .6);
-    it.r += Math.sin(tt * .7 + it.ph) * .08 * dt; it.r = Math.max(.2, Math.min(POT_R - .45, it.r));
-    if (it.drop) { it.vy -= 18 * dt; it.obj.position.y += it.vy * dt; if (it.obj.position.y < .05) { it.obj.position.y = .05; it.drop = false; it.vy = 0; } }
-    else it.obj.position.y = .06 + Math.sin(tt * 2 + it.ph) * .05;
-    it.obj.position.x = Math.cos(it.a) * it.r; it.obj.position.z = Math.sin(it.a) * it.r; it.obj.rotation.y += (it.obj.userData.spin || 0) * dt;
-    if (RUN && RUN.pot === 3) it.obj.rotation.z = Math.sin(tt * 3 + it.ph) * .08;
-    // 煮える（すくうまで）
-    if (playing && it.ideal && !it.drop) {
+    const held = inLadle(it);
+    if (!held) {
+      it.a += it.w * dt * (1.2 - it.r / POT_R * .6);
+      it.r += Math.sin(tt * .7 + it.ph) * .08 * dt; it.r = Math.max(.2, Math.min(POT_R - .45, it.r));
+      if (it.drop) { it.vy -= 18 * dt; it.obj.position.y += it.vy * dt; if (it.obj.position.y < .05) { it.obj.position.y = .05; it.drop = false; it.vy = 0; } }
+      else it.obj.position.y = .06 + Math.sin(tt * 2 + it.ph) * .05;
+      it.obj.position.x = Math.cos(it.a) * it.r; it.obj.position.z = Math.sin(it.a) * it.r; it.obj.rotation.y += (it.obj.userData.spin || 0) * dt;
+      if (RUN && RUN.pot === 3) it.obj.rotation.z = Math.sin(tt * 3 + it.ph) * .08;
+    }
+    // 煮える（鍋のスープの中にいる間だけ。持ち上げたおたまの中では止まる）
+    if (playing && it.ideal && !it.drop && (!held || SC.ld === 'dip')) {
       it.cook += dt;
       const [st, k] = cookState(it);
       if (st === 'kira' && it.st !== 'kira' && tt - (SC.lastKira || 0) > .25) { SND.kira(); SC.lastKira = tt; }
@@ -878,35 +958,46 @@ function stepScoop(dt, tt) {
       it.st = st; paintCook(it.obj, it.id, st, k, tt);
     }
   }
-  // 全部まっ黒になったら終わり
-  if (playing && !SC.holding && SC.lifting <= 0 && SC.items.length && SC.items.every(it => it.st === 'burnt')) {
-    SND.sizzle(); bigMsg(tr('allBurnt'), tr('allBurntSub'), 'bad', 1.6); buzz([40, 60, 40]); finishScoop();
+  // 鍋の具が全部まっ黒（おたまが空）なら終わり。鍋がからっぽでも終わり
+  if (playing && SC.ld === 'none' && !SC.flying.length) {
+    const pot = SC.items.filter(it => !inLadle(it));
+    if (pot.length && pot.every(it => it.st === 'burnt')) { SND.sizzle(); bigMsg(tr('allBurnt'), tr('allBurntSub'), 'bad', 1.6); buzz([40, 60, 40]); finishScoop(); }
+    else if (!pot.length) finishScoop();
   }
-  if (playing && !SC.holding && SC.lifting <= 0 && !SC.items.length && SC.left > 0) finishScoop();
   // おたま
-  if (SC.holding) {
-    SC.holdT += dt;
-    const p = SC.target; ladle.position.x += (p.x - ladle.position.x) * Math.min(1, dt * 18); ladle.position.z += (p.z - ladle.position.z) * Math.min(1, dt * 18);
-    const lim = POT_R - .5, d = Math.hypot(ladle.position.x, ladle.position.z); if (d > lim) { ladle.position.x *= lim / d; ladle.position.z *= lim / d; }
-    ladle.position.y += (.22 - ladle.position.y) * Math.min(1, dt * 14);
-    if (SC.grabbed.length < LADLE_CAP && ladle.position.y < .45) {
+  const lp = ladle.position, speed = SC.prevLP.distanceTo(lp) / Math.max(dt, 1e-3); SC.prevLP.copy(lp);
+  if (SC.ld === 'dip') {
+    const p = SC.target; lp.x += (p.x - lp.x) * Math.min(1, dt * 16); lp.z += (p.z - lp.z) * Math.min(1, dt * 16);
+    const lim = POT_R - .5, d = Math.hypot(lp.x, lp.z); if (d > lim) { lp.x *= lim / d; lp.z *= lim / d; }
+    lp.y += (.22 - lp.y) * Math.min(1, dt * 12);
+    if (lp.y < .45 && SC.grabbed.length < MAX_IN) {
       for (const it of SC.items) {
-        if (SC.grabbed.length >= LADLE_CAP) break;
-        if (SC.grabbed.some(g => g.it === it) || it.drop) continue;
-        const dx = it.obj.position.x - ladle.position.x, dz = it.obj.position.z - ladle.position.z;
-        if (dx * dx + dz * dz < LADLE_R * LADLE_R) {
-          const k = SC.grabbed.length, a = k * 2.1, rr = k ? .32 : 0;
-          SC.grabbed.push({ it, off: new THREE.Vector3(Math.cos(a) * rr, .02 + k * .04, Math.sin(a) * rr) });
-          SND.bubble(); buzz(6);
-        }
+        if (SC.grabbed.length >= MAX_IN) break;
+        if (it.drop || inLadle(it)) continue;
+        const dx = it.obj.position.x - lp.x, dz = it.obj.position.z - lp.z;
+        if (dx * dx + dz * dz < LADLE_R * LADLE_R) { SC.grabbed.push({ it, off: slotOff(SC.grabbed.length) }); SND.bubble(); buzz(6); }
       }
     }
-    if (SC.holdT > 2.5) liftLadle();
-  } else if (SC.lifting > 0) {
-    SC.lifting -= dt; ladle.position.y += 9 * dt;
-    if (SC.lifting <= 0) landLadle();
+  } else if (SC.ld === 'hover') {
+    lp.y += (1.1 - lp.y) * Math.min(1, dt * 8);
+  } else if (SC.ld === 'carry') stepCarry(dt);
+  // 速く動かすとこぼれる（積んだ分ほどこぼれやすい）
+  if (SC.ld === 'dip' || SC.ld === 'hover') {
+    let n = 0;
+    for (let k = SC.grabbed.length - 1; k >= 0; k--) {
+      const stab = k < SAFE_N ? 1 : .4, rate = Math.max(0, speed - 7 * stab) * .12;
+      if (Math.random() < rate * dt) { spillToPot(k); n++; }
+    }
+    if (n && SC.ld === 'hover') spillPop(n);
+    else if (n) { SND.bubble(); }
   }
-  for (const g of SC.grabbed) g.it.obj.position.set(ladle.position.x + g.off.x, ladle.position.y - .05 + g.off.y, ladle.position.z + g.off.z);
+  for (const g of SC.grabbed) g.it.obj.position.set(lp.x + g.off.x, lp.y + g.off.y, lp.z + g.off.z);
+  // 机に落ちた具
+  for (let i = SC.falling.length - 1; i >= 0; i--) {
+    const f = SC.falling[i]; f.t += dt; f.v.y -= 16 * dt; f.obj.position.addScaledVector(f.v, dt); f.obj.rotation.x += dt * 6;
+    if (f.obj.position.y < TABLE_Y + .1) { f.obj.position.y = TABLE_Y + .1; f.v.set(0, 0, 0); }
+    if (f.t > 1.6) { scene.remove(f.obj); SC.falling.splice(i, 1); }
+  }
   // お皿へ飛んでいく
   for (let i = SC.flying.length - 1; i >= 0; i--) {
     const f = SC.flying[i]; f.t += dt / .45; if (f.t <= 0) continue;
@@ -922,38 +1013,35 @@ const labelEls = [];
 function startCount() {
   mode = 'count'; setStep(tr('countL'), '');
   const res = evalLine(SC.line, RUN.pot);
-  CNT = { res, i: 0, t: .35, cur: 0, done: false };
+  CNT = { res, i: 0, t: .35, done: false };
   $('#labels').innerHTML = ''; labelEls.length = 0;
   SC.line.forEach((it, i) => { const d = document.createElement('div'); d.className = 'lab'; d.hidden = true; $('#labels').appendChild(d); labelEls.push({ el: d, i }); });
   $('#countBox').hidden = false; $('#countN').textContent = '0'; $('#countSub').textContent = '';
   $('#skipBtn').hidden = false;
+  if (!res.steps.length) endCount();
 }
 function stepCount(dt) {
   if (!CNT || CNT.done) return;
   CNT.t -= dt; if (CNT.t > 0) return;
-  const { res } = CNT, s = res.steps[CNT.i];
-  if (!s) return endCount();
+  if (!CNT.res.steps[CNT.i]) return endCount();
   showStep(CNT.i, true);
   CNT.i++;
-  CNT.t = Math.max(.12, .32 - CNT.i * .015); // だんだん速く
+  CNT.t = Math.max(.12, .34 - CNT.i * .015);
 }
 function showStep(i, fx) {
   const s = CNT.res.steps[i], it = SC.line[i];
-  $('#countN').textContent = fmtN(s.v); CNT.cur = s.v;
-  if (s.op === 'pot') {
-    $('#countSub').textContent = tr('potFinal', { pot: L4(POTS[RUN.pot - 1].name) });
-    if (fx) { SND.mul(i); flash(.3); }
-    return;
-  }
+  $('#countN').textContent = fmtN(s.v);
+  if (s.op === 'pot') { $('#countSub').textContent = tr('potFinal', { pot: L4(POTS[RUN.pot - 1].name) }); if (fx) { SND.mul(i); flash(.3); } return; }
+  if (s.op === 'tail') { $('#countSub').textContent = chainStr(s.chain) + ' = +' + fmtN(s.n); if (fx) { SND.add(i); } return; }
   const L = labelEls[i]; L.el.hidden = false;
   L.el.className = 'lab ' + (s.op === '+' ? 'v' : 'm') + (it.st === 'kira' ? ' kira' : '') + (it.st === 'burnt' ? ' burnt' : '');
   L.el.textContent = s.op === '+' ? '+' + fmtN(s.n) : fmtM(s.n);
-  $('#countSub').textContent = (s.op === '+' ? '+' + fmtN(s.n) : fmtM(s.n)) + '　' + ingName(it.id);
+  $('#countSub').textContent = s.op === '+' ? (s.chain.length ? chainStr(s.chain) + '×' + s.a + ' = +' + fmtN(s.n) : '+' + fmtN(s.n)) + '　' + ingName(it.id) : chainStr(s.chain) + ' …　' + ingName(it.id);
   if (fx) {
     if (it.st === 'burnt') SND.burnt(); else if (s.op === '+') SND.add(i); else SND.mul(i);
     it.obj.position.y += .35; setTimeout(() => { it.obj.position.y -= .35; }, 90);
-    const n = $('#countN'); n.style.transform = 'scale(1.18)'; setTimeout(() => n.style.transform = '', 80);
-    if (s.op === '×' && s.n >= 2) { flash(.25); buzz(15); }
+    if (s.op === '+') { const n = $('#countN'); n.style.transform = 'scale(1.18)'; setTimeout(() => n.style.transform = '', 80); }
+    if (s.op === '+' && s.chain.length >= 2) { flash(.25); buzz(15); }
   }
 }
 function endCount() {
@@ -976,7 +1064,7 @@ function showResult() {
   $('#resH').textContent = L4(POTS[pot - 1].name);
   $('#resS').innerHTML = fmtN(s);
   $('#resSub').textContent = tr('resSub', { k }) + (nb ? '　' + tr('newBest') : '　' + tr('best', { s: fmtN(Math.max(prev, s)) }));
-  $('#resLine').innerHTML = CNT.res.steps.map((st, i) => st.op === 'pot' ? `<span>×1.5</span>` : `<span class="${st.op === '+' ? 'v' : 'm'} ${SC.line[i].st}">${esc(ingName(SC.line[i].id))} ${st.op === '+' ? '+' + fmtN(st.n) : fmtM(st.n)}</span>`).join('');
+  $('#resLine').innerHTML = CNT.res.steps.map((st, i) => st.op === 'pot' ? `<span>×1.5</span>` : st.op === 'tail' ? `<span class="m">${esc(chainStr(st.chain))} = +${fmtN(st.n)}</span>` : `<span class="${st.op === '+' ? 'v' : 'm'} ${SC.line[i].st}">${esc(ingName(SC.line[i].id))} ${st.op === '+' ? '+' + fmtN(st.n) : fmtM(st.n)}</span>`).join('');
   $('#nameIn').value = lsGet('nb_name') || ''; $('#sendMsg').textContent = ''; $('#sendMsg').className = 'note'; $('#send').disabled = !(s >= 1);
   show('#resP'); loadRank(pot, $('#rlist'));
   if (window.gtag) gtag('event', 'nabe_end', { pot, score: s });
@@ -1071,7 +1159,7 @@ boardG.visible = false;
   const ids = ['momo', 'negi', 'hakusai', 'shiitake', 'tsukune', 'ninjin', 'daikon', 'enoki'];
   const deco = [];
   for (let i = 0; i < 16; i++) { const id = ids[i % ids.length], o = makePiece(id, i % 4 === 0); const r = .6 + Math.random() * 2, a = Math.random() * 6.28; o.position.set(Math.cos(a) * r, .06, Math.sin(a) * r); potG.add(o); deco.push({ id, obj: o, a, r, w: .15 + Math.random() * .1, ph: Math.random() * 6, drop: false, vy: 0 }); }
-  SC = { t: 0, left: 0, items: deco, grabbed: [], ended: true, lifting: 0, line: [], flying: [] };
+  SC = { t: 0, left: 0, items: deco, grabbed: [], ld: 'none', ended: true, line: [], flying: [], falling: [], prevLP: new THREE.Vector3() };
 }
 resize(); setCam('title', true); applyLang();
 $('#loading').hidden = true;
