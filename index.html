@@ -285,7 +285,7 @@ const BURN_T = 7;       // 煮すぎてから、まっ黒になるまでの秒�
 const TX = {
   ja: {
     title: 'なべなべすくい', titleH: 'なべなべ<br><em>すくい</em>', sub: '切って、煮て、すくえ。',
-    how: '① 具材をえらんで、<b>点線どおりに切る</b>（2回。きれいに切ると1こ増える）<br>② 鍋の具はだんだん煮える。<b>ちょうどいい間だけキラキラ</b>（すくうと強い）。焦げる直前は点滅する<b>ギリギリ</b>でもっと強い<br>③ 鍋をなぞって<b>おたまに具を入れる</b>。はなすと持ち上げるだけなので、何回でも足せる。<b>積みすぎ・速く動かすとこぼれる</b><br>④ 「お皿にうつす」で運ぶ（3回まで）。時間制限なし、でも<b>全部まっ黒になったら終わり</b><br>⑤ まっ黒の野菜は+0、肉は×0.5。すくった順にお皿に並び、<b>肉は×、野菜は＋</b>。電卓みたいに左から順に計算（肉2 肉2 野菜10 → 2×2+10）。野菜で増やしてから肉でかけると大きい。キラキラが続けて並ぶと連続ボーナス',
+    how: '切って、煮て、おたまですくう（3回）<br><b>キラキラ光った具</b>をすくうと強い。焦がすな<br>並んだ順に<b>野菜は＋、肉は×</b>',
     raw: '生', kiraL: 'キラキラ', over: '煮すぎ', burnt: 'まっ黒',
     rank: 'ランキング', toTitle: 'タイトルへ', pickL: 'えらぶ', scoopL: 'すくう', countL: '計算',
     pickH: '具材をえらぶ（{n}/{m}）', pickSub: 'えらんだ具材を切って、鍋に入れます', inPot: '鍋に入る具材', more: '追加',
@@ -311,7 +311,7 @@ const TX = {
   },
   en: {
     title: 'Nabe Nabe Sukui', titleH: 'Nabe Nabe<br><em>Sukui</em>', sub: 'Cut it, stew it, scoop it.',
-    how: '① Pick ingredients and <b>cut along the dotted lines</b> (2 times; clean cuts give +1 piece)<br>② Things slowly cook and <b>sparkle only while just right</b> (strong when scooped). Right before burning they flash — <b>last second</b>, even stronger<br>③ <b>Drag through the pot to gather pieces into the ladle</b>. Letting go just lifts it — you can keep adding. <b>Piling up or moving fast spills</b><br>④ Tap "Move to plate" to carry (3 times). No time limit, but <b>if everything burns, it\'s over</b><br>⑤ Burnt veggie +0, burnt meat ×0.5. Pieces line up in order: <b>meat ×, veggie +</b>. Calculated left to right like a calculator (meat2 meat2 veg10 → 2×2+10). Add veggies, then multiply with meat! Sparkly pieces in a row give a streak bonus',
+    how: 'Cut, stew, scoop with the ladle (3 times)<br><b>Sparkly pieces</b> score big. Don\'t burn them<br>In order: <b>veggie +, meat ×</b>',
     raw: 'Raw', kiraL: 'Sparkly', over: 'Overcooked', burnt: 'Burnt',
     rank: 'Ranking', toTitle: 'Title', pickL: 'Pick', scoopL: 'Scoop', countL: 'Count',
     pickH: 'Pick an ingredient ({n}/{m})', pickSub: 'You will cut it and put it in the pot', inPot: 'Going into the pot', more: 'More',
@@ -337,7 +337,7 @@ const TX = {
   },
   zh: {
     title: '鍋鍋撈撈', titleH: '鍋鍋<br><em>撈撈</em>', sub: '切好、煮好、撈起來。',
-    how: '① 選食材，<b>沿著虛線切</b>（2次。切得漂亮會多1塊）<br>② 鍋裡的料慢慢煮熟，<b>只有剛好的時候會發亮</b>（這時撈起很強）。快焦之前會閃爍＝<b>千鈞一髮</b>，更強<br>③ <b>在鍋裡劃過，把料裝進湯勺</b>。放開只是舉起來，可以一直加。<b>堆太多或動太快會灑出來</b><br>④ 按「移到盤子」運過去（最多3次）。沒有時間限制，但<b>全部焦黑就結束</b><br>⑤ 焦黑的蔬菜+0，肉×0.5。依撈起順序排在盤子上，<b>肉是×、蔬菜是＋</b>。像計算機一樣從左邊依序算（肉2 肉2 菜10 → 2×2+10）。先用蔬菜加大再用肉乘最強。發亮的料連續排列有連續加成',
+    how: '切好、煮好、用湯勺撈（3次）<br>撈起<b>發亮的料</b>分數高。別煮焦<br>依排列順序：<b>蔬菜＋、肉×</b>',
     raw: '生的', kiraL: '發亮', over: '煮過頭', burnt: '焦黑',
     rank: '排行榜', toTitle: '回標題', pickL: '選料', scoopL: '撈', countL: '計算',
     pickH: '選食材（{n}/{m}）', pickSub: '選好的食材切好後放進鍋裡', inPot: '要放進鍋的食材', more: '追加',
@@ -363,7 +363,7 @@ const TX = {
   },
   ko: {
     title: '나베나베 스쿠이', titleH: '나베나베<br><em>스쿠이</em>', sub: '썰고, 끓이고, 떠라.',
-    how: '① 재료를 골라 <b>점선을 따라 썬다</b> (2번. 깔끔하게 썰면 1개 늘어난다)<br>② 재료는 점점 익고 <b>딱 알맞을 때만 반짝인다</b> (그때 뜨면 강하다). 타기 직전엔 깜빡이는 <b>아슬아슬</b>로 더 강하다<br>③ <b>냄비를 그어 국자에 재료를 담는다</b>. 떼면 들어 올리기만 하니까 계속 더할 수 있다. <b>너무 쌓거나 빨리 움직이면 쏟아진다</b><br>④ 「접시로 옮기기」로 옮긴다 (3번까지). 시간 제한은 없지만 <b>전부 새까매지면 끝</b><br>⑤ 새까만 채소는 +0, 고기는 ×0.5. 뜬 순서대로 접시에 줄을 서고, <b>고기는 ×, 채소는 +</b>. 계산기처럼 왼쪽부터 차례로 계산 (고기2 고기2 채소10 → 2×2+10). 채소로 늘린 뒤 고기로 곱하면 크다. 반짝이가 연속으로 서면 연속 보너스',
+    how: '썰고, 끓이고, 국자로 뜬다 (3번)<br><b>반짝이는 재료</b>를 뜨면 강하다. 태우지 마<br>줄 선 순서대로 <b>채소는 +, 고기는 ×</b>',
     raw: '날것', kiraL: '반짝', over: '너무 익음', burnt: '새까맘',
     rank: '랭킹', toTitle: '타이틀로', pickL: '고르기', scoopL: '뜨기', countL: '계산',
     pickH: '재료 고르기 ({n}/{m})', pickSub: '고른 재료를 썰어서 냄비에 넣어요', inPot: '냄비에 들어갈 재료', more: '추가',
