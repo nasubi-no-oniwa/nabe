@@ -279,7 +279,7 @@ const BURN_T = 7;       // 煮すぎてから、まっ黒になるまでの秒�
 const TX = {
   ja: {
     title: 'なべなべすくい', titleH: 'なべなべ<br><em>すくい</em>', sub: '切って、煮て、すくえ。',
-    how: '① 具材をえらんで、<b>点線どおりに切る</b>（4回）<br>② 鍋の具はだんだん煮える。<b>ちょうどいい間だけキラキラ</b>（すくうと強い）<br>③ 鍋をなぞって<b>おたまに具を入れる</b>。はなすと持ち上げるだけなので、何回でも足せる。<b>積みすぎ・速く動かすとこぼれる</b><br>④ 「お皿にうつす」で運ぶ（3回まで）。時間制限なし、でも<b>全部まっ黒になったら終わり</b><br>⑤ まっ黒は0（肉なら×0）。すくった順にお皿に並び、<b>肉は×、野菜は＋</b>（かけ算が先）。肉は直後の野菜にかかる：肉 肉 野菜 → 3×3×野菜',
+    how: '① 具材をえらんで、<b>点線どおりに切る</b>（4回）<br>② 鍋の具はだんだん煮える。<b>ちょうどいい間だけキラキラ</b>（すくうと強い）<br>③ 鍋をなぞって<b>おたまに具を入れる</b>。はなすと持ち上げるだけなので、何回でも足せる。<b>積みすぎ・速く動かすとこぼれる</b><br>④ 「お皿にうつす」で運ぶ（3回まで）。時間制限なし、でも<b>全部まっ黒になったら終わり</b><br>⑤ まっ黒は0（肉なら×0）。すくった順にお皿に並び、<b>肉は×、野菜は＋</b>。電卓みたいに左から順に計算（肉2 肉2 野菜10 → 2×2+10）。野菜で増やしてから肉でかけると大きい',
     raw: '生', kiraL: 'キラキラ', over: '煮すぎ', burnt: 'まっ黒',
     rank: 'ランキング', toTitle: 'タイトルへ', pickL: 'えらぶ', scoopL: 'すくう', countL: '計算',
     pickH: '具材をえらぶ（{n}/{m}）', pickSub: 'えらんだ具材を切って、鍋に入れます', inPot: '鍋に入る具材', more: '追加',
@@ -299,7 +299,7 @@ const TX = {
   },
   en: {
     title: 'Nabe Nabe Sukui', titleH: 'Nabe Nabe<br><em>Sukui</em>', sub: 'Cut it, stew it, scoop it.',
-    how: '① Pick ingredients and <b>cut along the dotted lines</b> (4 times)<br>② Things slowly cook and <b>sparkle only while just right</b> (strong when scooped)<br>③ <b>Drag through the pot to gather pieces into the ladle</b>. Letting go just lifts it — you can keep adding. <b>Piling up or moving fast spills</b><br>④ Tap "Move to plate" to carry (3 times). No time limit, but <b>if everything burns, it\'s over</b><br>⑤ Burnt = 0 (meat is ×0). Pieces line up in order: <b>meat ×, veggie +</b> (× first). Meat multiplies the next veggie: meat meat veg → 3×3×veg',
+    how: '① Pick ingredients and <b>cut along the dotted lines</b> (4 times)<br>② Things slowly cook and <b>sparkle only while just right</b> (strong when scooped)<br>③ <b>Drag through the pot to gather pieces into the ladle</b>. Letting go just lifts it — you can keep adding. <b>Piling up or moving fast spills</b><br>④ Tap "Move to plate" to carry (3 times). No time limit, but <b>if everything burns, it\'s over</b><br>⑤ Burnt = 0 (meat is ×0). Pieces line up in order: <b>meat ×, veggie +</b>. Calculated left to right like a calculator (meat2 meat2 veg10 → 2×2+10). Add veggies, then multiply with meat!',
     raw: 'Raw', kiraL: 'Sparkly', over: 'Overcooked', burnt: 'Burnt',
     rank: 'Ranking', toTitle: 'Title', pickL: 'Pick', scoopL: 'Scoop', countL: 'Count',
     pickH: 'Pick an ingredient ({n}/{m})', pickSub: 'You will cut it and put it in the pot', inPot: 'Going into the pot', more: 'More',
@@ -319,7 +319,7 @@ const TX = {
   },
   zh: {
     title: '鍋鍋撈撈', titleH: '鍋鍋<br><em>撈撈</em>', sub: '切好、煮好、撈起來。',
-    how: '① 選食材，<b>沿著虛線切</b>（4次）<br>② 鍋裡的料慢慢煮熟，<b>只有剛好的時候會發亮</b>（這時撈起很強）<br>③ <b>在鍋裡劃過，把料裝進湯勺</b>。放開只是舉起來，可以一直加。<b>堆太多或動太快會灑出來</b><br>④ 按「移到盤子」運過去（最多3次）。沒有時間限制，但<b>全部焦黑就結束</b><br>⑤ 焦黑是0（肉就是×0）。依撈起順序排在盤子上，<b>肉是×、蔬菜是＋</b>（先乘後加）。肉會乘到後面的蔬菜：肉 肉 菜 → 3×3×菜',
+    how: '① 選食材，<b>沿著虛線切</b>（4次）<br>② 鍋裡的料慢慢煮熟，<b>只有剛好的時候會發亮</b>（這時撈起很強）<br>③ <b>在鍋裡劃過，把料裝進湯勺</b>。放開只是舉起來，可以一直加。<b>堆太多或動太快會灑出來</b><br>④ 按「移到盤子」運過去（最多3次）。沒有時間限制，但<b>全部焦黑就結束</b><br>⑤ 焦黑是0（肉就是×0）。依撈起順序排在盤子上，<b>肉是×、蔬菜是＋</b>。像計算機一樣從左邊依序算（肉2 肉2 菜10 → 2×2+10）。先用蔬菜加大再用肉乘最強',
     raw: '生的', kiraL: '發亮', over: '煮過頭', burnt: '焦黑',
     rank: '排行榜', toTitle: '回標題', pickL: '選料', scoopL: '撈', countL: '計算',
     pickH: '選食材（{n}/{m}）', pickSub: '選好的食材切好後放進鍋裡', inPot: '要放進鍋的食材', more: '追加',
@@ -339,7 +339,7 @@ const TX = {
   },
   ko: {
     title: '나베나베 스쿠이', titleH: '나베나베<br><em>스쿠이</em>', sub: '썰고, 끓이고, 떠라.',
-    how: '① 재료를 골라 <b>점선을 따라 썬다</b> (4번)<br>② 재료는 점점 익고 <b>딱 알맞을 때만 반짝인다</b> (그때 뜨면 강하다)<br>③ <b>냄비를 그어 국자에 재료를 담는다</b>. 떼면 들어 올리기만 하니까 계속 더할 수 있다. <b>너무 쌓거나 빨리 움직이면 쏟아진다</b><br>④ 「접시로 옮기기」로 옮긴다 (3번까지). 시간 제한은 없지만 <b>전부 새까매지면 끝</b><br>⑤ 새까만 건 0 (고기는 ×0). 뜬 순서대로 접시에 줄을 서고, <b>고기는 ×, 채소는 +</b> (곱셈 먼저). 고기는 바로 뒤 채소에 곱해진다: 고기 고기 채소 → 3×3×채소',
+    how: '① 재료를 골라 <b>점선을 따라 썬다</b> (4번)<br>② 재료는 점점 익고 <b>딱 알맞을 때만 반짝인다</b> (그때 뜨면 강하다)<br>③ <b>냄비를 그어 국자에 재료를 담는다</b>. 떼면 들어 올리기만 하니까 계속 더할 수 있다. <b>너무 쌓거나 빨리 움직이면 쏟아진다</b><br>④ 「접시로 옮기기」로 옮긴다 (3번까지). 시간 제한은 없지만 <b>전부 새까매지면 끝</b><br>⑤ 새까만 건 0 (고기는 ×0). 뜬 순서대로 접시에 줄을 서고, <b>고기는 ×, 채소는 +</b>. 계산기처럼 왼쪽부터 차례로 계산 (고기2 고기2 채소10 → 2×2+10). 채소로 늘린 뒤 고기로 곱하면 크다',
     raw: '날것', kiraL: '반짝', over: '너무 익음', burnt: '새까맘',
     rank: '랭킹', toTitle: '타이틀로', pickL: '고르기', scoopL: '뜨기', countL: '계산',
     pickH: '재료 고르기 ({n}/{m})', pickSub: '고른 재료를 썰어서 냄비에 넣어요', inPot: '냄비에 들어갈 재료', more: '추가',
@@ -371,7 +371,7 @@ const L4 = a => a[LI[LANG]] || a[0];
 
 /* ===================== 鍋 ===================== */
 const POTS = [
-  { id: 1, name: ['白湯とり鍋', 'Chicken Paitan Pot', '白湯雞肉鍋', '백탕 닭냄비'], fx: ['肉の×に+1', 'Meat +1×', '肉 ×+1', '고기 ×+1'], broth: 0xf3e7cf, bowl: '#f3e7cf' },
+  { id: 1, name: ['白湯とり鍋', 'Chicken Paitan Pot', '白湯雞肉鍋', '백탕 닭냄비'], fx: ['肉の×に+0.5', 'Meat +0.5×', '肉 ×+0.5', '고기 ×+0.5'], broth: 0xf3e7cf, bowl: '#f3e7cf' },
   { id: 2, name: ['野菜よせ鍋', 'Veggie Yose Pot', '蔬菜什錦鍋', '채소 모둠냄비'], fx: ['野菜の＋が1.5倍', 'Veggie + is ×1.5', '蔬菜的＋變1.5倍', '채소 +가 1.5배'], broth: 0xd9a24a, bowl: '#d9a24a' },
   { id: 3, name: ['激辛鍋', 'Super Spicy Pot', '超辣鍋', '초매운 냄비'], fx: ['最後に全部×1.5。最初の3秒は味しみ待ち（早いと弱い）', 'Final total ×1.5. Wait 3s for the flavor (early is weak)', '最後全部×1.5。前3秒等入味（太早會變弱）', '마지막에 전부 ×1.5. 처음 3초는 맛 배기 대기 (빠르면 약함)'], broth: 0xc4281b, bowl: '#c4281b' },
 ];
@@ -379,20 +379,20 @@ const POTS = [
 /* ===================== 具材 ===================== */
 // t: v=野菜（＋） c=肉（×） / r: レア度 / val: 野菜は足す数、肉はかける数 / pc: 鍋に入るこ数 / lines: 切る線の数 / cook: ちょうどよく煮えるまでの秒数
 const ING = {
-  momo: { t: 'c', r: 0, val: 3, pc: 4, lines: 1, cook: 7, col: 0xf0b49c, shape: 'chunk', name: ['もも肉', 'Thigh', '雞腿肉', '닭다리살'], fx: ['シンプルに×3', 'Plain ×3', '單純×3', '그냥 ×3'] },
-  mune: { t: 'c', r: 0, val: 2, pc: 5, lines: 1, cook: 6, col: 0xf7d2c2, shape: 'chunk', name: ['むね肉', 'Breast', '雞胸肉', '닭가슴살'], fx: ['前に並んだ肉1こにつき×+0.5', '+0.5× per meat before it', '前面每有1塊肉 ×+0.5', '앞에 있는 고기 1개마다 ×+0.5'] },
-  tebasaki: { t: 'c', r: 1, val: 3, pc: 3, lines: 1, cook: 8, col: 0xd9935a, shape: 'wing', name: ['手羽先', 'Wing tip', '雞翅尖', '닭날개'], fx: ['1こだけで運ぶと×6', '×6 if carried alone', '單獨運送時×6', '혼자 옮기면 ×6'] },
-  tsukune: { t: 'c', r: 1, val: 2, pc: 4, lines: 2, cook: 6, col: 0x9b6a43, shape: 'ball', name: ['つくね', 'Tsukune', '雞肉丸', '츠쿠네'], fx: ['前に並んだつくね1こにつき×+1', '+1× per tsukune before it', '前面每有1顆雞肉丸 ×+1', '앞에 있는 츠쿠네 1개마다 ×+1'] },
-  kawa: { t: 'c', r: 0, val: 2.5, pc: 4, lines: 2, cook: 5, col: 0xf3dca0, shape: 'skin', name: ['鶏皮', 'Chicken skin', '雞皮', '닭껍질'], fx: ['生・煮すぎでも弱くならない', 'Not weakened when raw or overcooked', '生的、煮過頭都不會變弱', '날것·너무 익어도 약해지지 않음'] },
-  jidori: { t: 'c', r: 2, val: 5, pc: 3, lines: 2, cook: 9, col: 0xe48f72, shape: 'chunk', name: ['地鶏', 'Jidori chicken', '土雞', '토종닭'], fx: ['とにかく×5', 'Just ×5', '就是×5', '그냥 ×5'] },
-  hakusai: { t: 'v', r: 0, val: 250, pc: 6, lines: 2, cook: 4, col: 0xeef5d8, shape: 'leaf', name: ['白菜', 'Napa cabbage', '白菜', '배추'], fx: ['前に並んだ野菜1こにつき+75', '+75 per veggie before it', '前面每有1樣蔬菜+75', '앞에 있는 채소 1개마다 +75'] },
-  negi: { t: 'v', r: 0, val: 300, pc: 5, lines: 3, cook: 3, col: 0xeef3e2, shape: 'negi', name: ['ねぎ', 'Leek', '蔥', '대파'], fx: ['次の肉の×に+1', 'Next meat gets +1×', '下一塊肉 ×+1', '다음 고기 ×+1'] },
-  ninjin: { t: 'v', r: 0, val: 375, pc: 4, lines: 3, cook: 7, col: 0xf08a24, shape: 'carrot', name: ['にんじん', 'Carrot', '紅蘿蔔', '당근'], fx: ['前に大根があれば+500', '+500 if daikon is before it', '前面有白蘿蔔就+500', '앞에 무가 있으면 +500'] },
-  daikon: { t: 'v', r: 1, val: 450, pc: 4, lines: 3, cook: 9, col: 0xf7f5ee, shape: 'daikon', name: ['大根', 'Daikon', '白蘿蔔', '무'], fx: ['煮えた秒数×75（最大+1000）', '+75 per second cooked (max +1000)', '煮的秒數×75（最多+1000）', '익은 초 ×75 (최대 +1000)'] },
-  shiitake: { t: 'v', r: 1, val: 450, pc: 4, lines: 1, cook: 5, col: 0x7a4f2e, shape: 'shroom', name: ['しいたけ', 'Shiitake', '香菇', '표고버섯'], fx: ['運ぶと鍋に残った野菜が全部+125', 'When carried, veggies left in the pot +125', '運走後鍋裡剩下的蔬菜全部+125', '옮기면 냄비에 남은 채소 전부 +125'] },
-  enoki: { t: 'v', r: 0, val: 200, pc: 6, lines: 1, cook: 2.5, col: 0xf4efd8, shape: 'enoki', name: ['えのき', 'Enoki', '金針菇', '팽이버섯'], fx: ['前に並んだえのき1こにつき+150', '+150 per enoki before it', '前面每有1把金針菇+150', '앞에 있는 팽이버섯 1개마다 +150'] },
-  shungiku: { t: 'v', r: 1, val: 750, pc: 3, lines: 2, cook: 2.5, col: 0x3f8f3a, shape: 'herb', name: ['春菊', 'Crown daisy', '茼蒿', '쑥갓'], fx: ['すぐ前が肉なら+500', '+500 right after a meat', '緊接在肉後面+500', '바로 앞이 고기면 +500'] },
-  kujo: { t: 'v', r: 2, val: 500, pc: 4, lines: 3, cook: 3, col: 0x5aa848, shape: 'negi', name: ['九条ねぎ', 'Kujo leek', '九條蔥', '쿠조파'], fx: ['次の肉の×を2倍', "Doubles the next meat's ×", '下一塊肉的×變2倍', '다음 고기의 ×를 2배'] },
+  momo: { t: 'c', r: 0, val: 2, pc: 4, lines: 1, cook: 7, col: 0xf0b49c, shape: 'chunk', name: ['もも肉', 'Thigh', '雞腿肉', '닭다리살'], fx: ['シンプルに×2', 'Plain ×2', '單純×2', '그냥 ×2'] },
+  mune: { t: 'c', r: 0, val: 1.5, pc: 5, lines: 1, cook: 6, col: 0xf7d2c2, shape: 'chunk', name: ['むね肉', 'Breast', '雞胸肉', '닭가슴살'], fx: ['前に並んだ肉1こにつき×+0.25', '+0.25× per meat before it', '前面每有1塊肉 ×+0.25', '앞에 있는 고기 1개마다 ×+0.25'] },
+  tebasaki: { t: 'c', r: 1, val: 2, pc: 3, lines: 1, cook: 8, col: 0xd9935a, shape: 'wing', name: ['手羽先', 'Wing tip', '雞翅尖', '닭날개'], fx: ['1こだけで運ぶと×4', '×4 if carried alone', '單獨運送時×4', '혼자 옮기면 ×4'] },
+  tsukune: { t: 'c', r: 1, val: 1.5, pc: 4, lines: 2, cook: 6, col: 0x9b6a43, shape: 'ball', name: ['つくね', 'Tsukune', '雞肉丸', '츠쿠네'], fx: ['前に並んだつくね1こにつき×+0.5', '+0.5× per tsukune before it', '前面每有1顆雞肉丸 ×+0.5', '앞에 있는 츠쿠네 1개마다 ×+0.5'] },
+  kawa: { t: 'c', r: 0, val: 1.8, pc: 4, lines: 2, cook: 5, col: 0xf3dca0, shape: 'skin', name: ['鶏皮', 'Chicken skin', '雞皮', '닭껍질'], fx: ['生・煮すぎでも弱くならない', 'Not weakened when raw or overcooked', '生的、煮過頭都不會變弱', '날것·너무 익어도 약해지지 않음'] },
+  jidori: { t: 'c', r: 2, val: 3, pc: 3, lines: 2, cook: 9, col: 0xe48f72, shape: 'chunk', name: ['地鶏', 'Jidori chicken', '土雞', '토종닭'], fx: ['とにかく×3', 'Just ×3', '就是×3', '그냥 ×3'] },
+  hakusai: { t: 'v', r: 0, val: 10, pc: 6, lines: 2, cook: 4, col: 0xeef5d8, shape: 'leaf', name: ['白菜', 'Napa cabbage', '白菜', '배추'], fx: ['前に並んだ野菜1こにつき+3', '+3 per veggie before it', '前面每有1樣蔬菜+3', '앞에 있는 채소 1개마다 +3'] },
+  negi: { t: 'v', r: 0, val: 12, pc: 5, lines: 3, cook: 3, col: 0xeef3e2, shape: 'negi', name: ['ねぎ', 'Leek', '蔥', '대파'], fx: ['次の肉の×に+0.5', 'Next meat gets +0.5×', '下一塊肉 ×+0.5', '다음 고기 ×+0.5'] },
+  ninjin: { t: 'v', r: 0, val: 15, pc: 4, lines: 3, cook: 7, col: 0xf08a24, shape: 'carrot', name: ['にんじん', 'Carrot', '紅蘿蔔', '당근'], fx: ['前に大根があれば+20', '+20 if daikon is before it', '前面有白蘿蔔就+20', '앞에 무가 있으면 +20'] },
+  daikon: { t: 'v', r: 1, val: 18, pc: 4, lines: 3, cook: 9, col: 0xf7f5ee, shape: 'daikon', name: ['大根', 'Daikon', '白蘿蔔', '무'], fx: ['煮えた秒数×3（最大+40）', '+3 per second cooked (max +1000)', '煮的秒數×3（最多+40）', '익은 초 ×3 (최대 +40)'] },
+  shiitake: { t: 'v', r: 1, val: 18, pc: 4, lines: 1, cook: 5, col: 0x7a4f2e, shape: 'shroom', name: ['しいたけ', 'Shiitake', '香菇', '표고버섯'], fx: ['運ぶと鍋に残った野菜が全部+5', 'When carried, veggies left in the pot +5', '運走後鍋裡剩下的蔬菜全部+5', '옮기면 냄비에 남은 채소 전부 +5'] },
+  enoki: { t: 'v', r: 0, val: 8, pc: 6, lines: 1, cook: 2.5, col: 0xf4efd8, shape: 'enoki', name: ['えのき', 'Enoki', '金針菇', '팽이버섯'], fx: ['前に並んだえのき1こにつき+6', '+6 per enoki before it', '前面每有1把金針菇+6', '앞에 있는 팽이버섯 1개마다 +6'] },
+  shungiku: { t: 'v', r: 1, val: 30, pc: 3, lines: 2, cook: 2.5, col: 0x3f8f3a, shape: 'herb', name: ['春菊', 'Crown daisy', '茼蒿', '쑥갓'], fx: ['すぐ前が肉なら+20', '+20 right after a meat', '緊接在肉後面+20', '바로 앞이 고기면 +20'] },
+  kujo: { t: 'v', r: 2, val: 20, pc: 4, lines: 3, cook: 3, col: 0x5aa848, shape: 'negi', name: ['九条ねぎ', 'Kujo leek', '九條蔥', '쿠조파'], fx: ['次の肉の×を2倍', "Doubles the next meat's ×", '下一塊肉的×變2倍', '다음 고기의 ×를 2배'] },
 };
 const ingName = id => L4(ING[id].name);
 const hex = n => '#' + n.toString(16).padStart(6, '0');
@@ -402,11 +402,11 @@ const hex = n => '#' + n.toString(16).padStart(6, '0');
 // line: [{id, st, cook, umami, alone, early}]
 function vegValue(it, ctx, pot) {
   const g = ING[it.id]; let a = g.val + (it.umami || 0);
-  if (it.id === 'hakusai') a += 75 * ctx.nV;
-  if (it.id === 'ninjin' && ctx.hasDaikon) a += 500;
-  if (it.id === 'daikon') a += Math.min(1000, Math.floor(75 * it.cook));
-  if (it.id === 'enoki') a += 150 * ctx.nEn;
-  if (it.id === 'shungiku' && ctx.prevMeat) a += 500;
+  if (it.id === 'hakusai') a += 3 * ctx.nV;
+  if (it.id === 'ninjin' && ctx.hasDaikon) a += 20;
+  if (it.id === 'daikon') a += Math.min(40, Math.floor(3 * it.cook));
+  if (it.id === 'enoki') a += 6 * ctx.nEn;
+  if (it.id === 'shungiku' && ctx.prevMeat) a += 20;
   if (pot === 2) a *= 1.5;
   if (it.st === 'kira') a *= 2; else if (it.st === 'raw') a *= .8; else if (it.st === 'over') a *= .6; else if (it.st === 'burnt') a = 0;
   if (it.early) a *= .5;
@@ -414,10 +414,10 @@ function vegValue(it, ctx, pot) {
 }
 function meatValue(it, ctx, pot) {
   const g = ING[it.id]; let m = g.val;
-  if (it.id === 'mune') m += .5 * ctx.nM;
-  if (it.id === 'tsukune') m += 1 * ctx.nTs;
-  if (it.id === 'tebasaki' && it.alone) m = 6;
-  if (pot === 1) m += 1;
+  if (it.id === 'mune') m += .25 * ctx.nM;
+  if (it.id === 'tsukune') m += .5 * ctx.nTs;
+  if (it.id === 'tebasaki' && it.alone) m = 4;
+  if (pot === 1) m += .5;
   let ex = m - 1;
   if (it.st === 'kira') ex *= 2; else if (it.id !== 'kawa' && it.st === 'raw') ex *= .5; else if (it.id !== 'kawa' && it.st === 'over') ex *= .6;
   if (it.st === 'burnt') return 0;
@@ -428,25 +428,24 @@ function meatValue(it, ctx, pot) {
   return Math.round(m * 100) / 100;
 }
 function evalLine(line, pot) {
+  // 電卓のように左から順番に：最初の具の数字から始めて、肉なら×、野菜なら＋
   const ctx = { nV: 0, nM: 0, nTs: 0, nEn: 0, hasDaikon: false, prevMeat: false, nextAdd: 0, nextDouble: false };
-  let total = 0, prod = 1, chain = [];
+  let total = 0;
   const steps = [];
-  for (const it of line) {
+  line.forEach((it, i) => {
     if (ING[it.id].t === 'v') {
-      const a = vegValue(it, ctx, pot), term = Math.round(prod * a);
-      total += term;
-      steps.push({ op: '+', a, chain: chain.slice(), n: term, v: total });
-      prod = 1; chain = [];
-      if (it.st !== 'burnt') { if (it.id === 'negi') ctx.nextAdd += 1; if (it.id === 'kujo') ctx.nextDouble = true; }
+      const a = vegValue(it, ctx, pot);
+      total = i === 0 ? a : total + a;
+      steps.push({ op: '+', n: a, v: total });
+      if (it.st !== 'burnt') { if (it.id === 'negi') ctx.nextAdd += .5; if (it.id === 'kujo') ctx.nextDouble = true; }
       ctx.nV++; if (it.id === 'enoki') ctx.nEn++; if (it.id === 'daikon') ctx.hasDaikon = true; ctx.prevMeat = false;
     } else {
       const m = meatValue(it, ctx, pot);
-      prod *= m; chain.push(m);
-      steps.push({ op: '×', n: m, chain: chain.slice(), v: total });
+      total = i === 0 ? m : total * m;
+      steps.push({ op: i === 0 ? 'start' : '×', n: m, v: total });
       ctx.nM++; if (it.id === 'tsukune') ctx.nTs++; ctx.prevMeat = true;
     }
-  }
-  if (chain.length) { const n = Math.round(prod); total += n; steps.push({ op: 'tail', chain: chain.slice(), n, v: total }); }
+  });
   if (pot === 3 && line.length) { total *= 1.5; steps.push({ op: 'pot', n: 1.5, v: total }); }
   return { v: Math.round(total), steps };
 }
@@ -915,7 +914,7 @@ function landLadle() {
   for (const it of got) { it.alone = got.length === 1; }
   // しいたけ：運んだら、鍋に残った野菜に旨み
   const nS = got.filter(x => x.id === 'shiitake' && x.st !== 'burnt').length;
-  if (nS) for (const it of SC.items) if (!got.includes(it) && ING[it.id].t === 'v') it.umami += 125 * nS;
+  if (nS) for (const it of SC.items) if (!got.includes(it) && ING[it.id].t === 'v') it.umami += 5 * nS;
   if (!got.length) { const [x, y] = toScreen(ladle.position); pop(x, Math.max(90, y - 40), tr('empty'), []); SND.meh(); }
   got.forEach((it, k) => {
     SC.items.splice(SC.items.indexOf(it), 1);
@@ -1035,16 +1034,17 @@ function showStep(i, fx) {
   const s = CNT.res.steps[i], it = SC.line[i];
   $('#countN').textContent = fmtN(s.v);
   if (s.op === 'pot') { $('#countSub').textContent = tr('potFinal', { pot: L4(POTS[RUN.pot - 1].name) }); if (fx) { SND.mul(i); flash(.3); } return; }
-  if (s.op === 'tail') { $('#countSub').textContent = chainStr(s.chain) + ' = +' + fmtN(s.n); if (fx) { SND.add(i); } return; }
   const L = labelEls[i]; L.el.hidden = false;
   L.el.className = 'lab ' + (s.op === '+' ? 'v' : 'm') + (it.st === 'kira' ? ' kira' : '') + (it.st === 'burnt' ? ' burnt' : '');
-  L.el.textContent = s.op === '+' ? '+' + fmtN(s.n) : fmtM(s.n);
-  $('#countSub').textContent = s.op === '+' ? (s.chain.length ? chainStr(s.chain) + '×' + s.a + ' = +' + fmtN(s.n) : '+' + fmtN(s.n)) + '　' + ingName(it.id) : chainStr(s.chain) + ' …　' + ingName(it.id);
+  const txt = s.op === '+' ? (i === 0 ? fmtN(s.n) : '+' + fmtN(s.n)) : s.op === 'start' ? fmtN(s.n) : fmtM(s.n);
+  L.el.textContent = txt;
+  $('#countSub').textContent = txt + '　' + ingName(it.id);
   if (fx) {
     if (it.st === 'burnt') SND.burnt(); else if (s.op === '+') SND.add(i); else SND.mul(i);
     it.obj.position.y += .35; setTimeout(() => { it.obj.position.y -= .35; }, 90);
-    if (s.op === '+') { const n = $('#countN'); n.style.transform = 'scale(1.18)'; setTimeout(() => n.style.transform = '', 80); }
-    if (s.op === '+' && s.chain.length >= 2) { flash(.25); buzz(15); }
+    const n = $('#countN'); n.style.transform = 'scale(' + (s.op === '×' ? 1.3 : 1.15) + ')'; setTimeout(() => n.style.transform = '', 90);
+    if (s.op === '×' && s.n >= 3) { flash(.25); buzz(15); }
+    if (s.op === '×' && s.n === 0) { flash(.4); buzz([30, 30, 30]); }
   }
 }
 function endCount() {
@@ -1067,7 +1067,7 @@ function showResult() {
   $('#resH').textContent = L4(POTS[pot - 1].name);
   $('#resS').innerHTML = fmtN(s);
   $('#resSub').textContent = tr('resSub', { k }) + (nb ? '　' + tr('newBest') : '　' + tr('best', { s: fmtN(Math.max(prev, s)) }));
-  $('#resLine').innerHTML = CNT.res.steps.map((st, i) => st.op === 'pot' ? `<span>×1.5</span>` : st.op === 'tail' ? `<span class="m">${esc(chainStr(st.chain))} = +${fmtN(st.n)}</span>` : `<span class="${st.op === '+' ? 'v' : 'm'} ${SC.line[i].st}">${esc(ingName(SC.line[i].id))} ${st.op === '+' ? '+' + fmtN(st.n) : fmtM(st.n)}</span>`).join('');
+  $('#resLine').innerHTML = CNT.res.steps.map((st, i) => st.op === 'pot' ? `<span>×1.5</span>` : `<span class="${st.op === '+' ? 'v' : 'm'} ${SC.line[i].st}">${esc(ingName(SC.line[i].id))} ${st.op === '+' ? (i ? '+' : '') + fmtN(st.n) : st.op === 'start' ? fmtN(st.n) : fmtM(st.n)}</span>`).join('');
   $('#nameIn').value = lsGet('nb_name') || ''; $('#sendMsg').textContent = ''; $('#sendMsg').className = 'note'; $('#send').disabled = !(s >= 1);
   show('#resP'); loadRank(pot, $('#rlist'));
   if (window.gtag) gtag('event', 'nabe_end', { pot, score: s });
