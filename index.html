@@ -1224,7 +1224,7 @@ boardG.visible = false;
 resize(); setCam('title', true); applyLang();
 $('#loading').hidden = true;
 requestAnimationFrame(frame);
-if (QS.has('debug')) window.NB = { cut: () => CUT, sc: () => SC, run: () => RUN, evalLine };
+if (QS.has('debug')) window.NB = { cut: () => CUT, sc: () => SC, run: () => RUN, evalLine, setOffer: ids => { OFFER = ids; renderPick(); }, startCarry, ladleUp, slotPos, startCount, finishScoop, endCount, cnt: () => CNT, plates, toScreen };
 const qp = +QS.get('pot'); if (qp >= 1 && qp <= 3) rankTab = qp;
 </script>
 </body>
